@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>宋式美学风格 · 节庆美陈装置 · 20组提示词生成器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #b7aa8f;
+            font-family: 'Microsoft YaHei', 'PingFang SC', 'Helvetica Neue', '宋体', 'SimSun', 'KaiTi', serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 30px 20px;
+        }
+
+        .generator-card {
+            max-width: 1600px;
+            width: 100%;
+            background: #f9f3e9;
+            border-radius: 60px;
+            box-shadow: 0 30px 60px rgba(120, 100, 80, 0.25);
+            overflow: hidden;
+            border: 2px solid #b7a88c;
+        }
+
+        .header {
+            background: #5e6b5c;
+            padding: 32px 40px;
+            color: #f5efe6;
+            border-bottom: 3px solid #d9c5a6;
+            border-radius: 60px 60px 0 0;
+        }
+
+        .header h1 {
+            font-size: 40px;
+            font-weight: 400;
+            letter-spacing: 4px;
+            margin-bottom: 10px;
+            font-family: 'Microsoft YaHei', 'PingFang SC', '宋体', serif;
+        }
+
+        .header p {
+            font-size: 18px;
+            color: #d9d0c0;
+            font-weight: 300;
+            border-left: 3px solid #d9c5a6;
+            padding-left: 20px;
+        }
+
+        .main {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .input-section {
+            flex: 1.2;
+            min-width: 420px;
+            background: #fefcf7;
+            padding: 45px 40px;
+            border-right: 1px solid #d9cdbc;
+        }
+
+        .input-section h2 {
+            font-size: 28px;
+            font-weight: 400;
+            color: #5e6b5c;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #d9c5a6;
+            padding-bottom: 15px;
+            letter-spacing: 2px;
+        }
+
+        .input-group {
+            margin-bottom: 28px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 17px;
+            font-weight: 400;
+            color: #7a6b58;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .input-group input, .input-group textarea, .input-group select {
+            width: 100%;
+            padding: 16px 22px;
+            font-size: 16px;
+            background: #fefcf7;
+            border: 1px solid #c9bbaa;
+            border-radius: 30px;
+            transition: 0.2s;
+            font-family: inherit;
+            color: #5a4f42;
+        }
+
+        .input-group input:focus, .input-group textarea:focus, .input-group select:focus {
+            border-color: #9e8b72;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(158, 139, 114, 0.15);
+        }
+
+        .input-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .generate-btn {
+            background: #5e6b5c;
+            border: none;
+            width: 100%;
+            padding: 20px;
+            font-size: 24px;
+            font-weight: 400;
+            color: #f5efe6;
+            letter-spacing: 4px;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 20px;
+            border-bottom: 3px solid #d9c5a6;
+            font-family: 'Microsoft YaHei', 'PingFang SC', '宋体', serif;
+        }
+
+        .generate-btn:hover {
+            background: #4a5548;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(90, 100, 80, 0.2);
+        }
+
+        .output-section {
+            flex: 2;
+            background: #f9f3e9;
+            padding: 45px 40px;
+            max-height: 800px;
+            overflow-y: auto;
+        }
+
+        .output-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .output-header h2 {
+            font-size: 28px;
+            font-weight: 400;
+            color: #5e6b5c;
+            letter-spacing: 2px;
+        }
+
+        .badge {
+            background: #d9cdbc;
+            color: #5e6b5c;
+            padding: 6px 24px;
+            border-radius: 40px;
+            font-size: 16px;
+            font-weight: 400;
+            border: 1px solid #b7a88c;
+        }
+
+        .prompts-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .prompt-item {
+            background: #fefcf7;
+            border: 1px solid #d9cdbc;
+            border-radius: 40px;
+            padding: 26px 30px;
+            transition: 0.2s;
+            position: relative;
+        }
+
+        .prompt-item:hover {
+            border-color: #b7a88c;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+        }
+
+        .prompt-number {
+            font-size: 15px;
+            font-weight: 400;
+            color: #9e8b72;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            background: #f0e9de;
+            display: inline-block;
+            padding: 4px 20px;
+            border-radius: 30px;
+            border: 1px solid #d9cdbc;
+        }
+
+        .prompt-text {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #5f5548;
+            margin-bottom: 15px;
+            padding-right: 110px;
+        }
+
+        .copy-btn {
+            background: #e0d9ce;
+            color: #5e6b5c;
+            border: none;
+            border-radius: 30px;
+            padding: 8px 22px;
+            font-size: 15px;
+            font-weight: 400;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid #b7a88c;
+            position: absolute;
+            bottom: 24px;
+            right: 30px;
+        }
+
+        .copy-btn:hover {
+            background: #b7a88c;
+            color: #ffffff;
+        }
+
+        .copy-btn.copied {
+            background: #4caf50;
+            color: white;
+            border-color: #388e3c;
+        }
+
+        .footer-note {
+            margin-top: 30px;
+            font-size: 15px;
+            color: #9e8b72;
+            text-align: right;
+            border-top: 1px dashed #d9cdbc;
+            padding-top: 20px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="generator-card">
+        <div class="header">
+            <h1>🎋 宋式美学 · 节庆美陈装置生成器</h1>
+            <p>雅 · 静 · 序 · 韵 · 低饱和 · 留白 · KT板/PVC板 · 20组正面3D效果图提示词</p>
+        </div>
+
+        <div class="main">
+            <div class="input-section">
+                <h2>🏮 输入节日与空间信息</h2>
+                
+                <div class="input-group">
+                    <label>🎑 节日主题</label>
+                    <input type="text" id="festival" value="中秋" placeholder="例：中秋 / 元宵 / 春节 / 端午">
+                </div>
+
+                <div class="input-group">
+                    <label>🏛️ 场地类型</label>
+                    <input type="text" id="venue" value="商场中庭" placeholder="例：商场中庭 / 文化空间 / 入口区域">
+                </div>
+
+                <div class="input-group">
+                    <label>🏷️ 公司/品牌名称 (可选)</label>
+                    <input type="text" id="brand" value="雅集文化中心" placeholder="例：雅集文化中心 / 宋代美学馆">
+                </div>
+
+                <div class="input-group">
+                    <label>🎨 核心意象 (可自定义)</label>
+                    <textarea id="elements" rows="2">月影 · 桂花 · 山水 · 竹 · 屏风 · 瓷器轮廓 · 宋画意蕴</textarea>
+                </div>
+
+                <div class="input-group">
+                    <label>🌈 宋式色彩倾向</label>
+                    <select id="colorSelect">
+                        <option value="米白、青灰、黛蓝、浅绛、月白" selected>中秋 · 米白/青灰/黛蓝/月白</option>
+                        <option value="米白、淡绛、浅木、墨灰">元宵 · 米白/淡绛/浅木</option>
+                        <option value="黛蓝、石绿、米白、淡金">春节 · 黛蓝/石绿/米白</option>
+                        <option value="青绿、米白、墨色、浅赭">端午 · 青绿/米白/墨色</option>
+                        <option value="定制色彩">自定义</option>
+                    </select>
+                </div>
+
+                <button class="generate-btn" id="generateBtn">✨ 生成 20 组宋式美陈提示词 ✨</button>
+            </div>
+
+            <div class="output-section" id="outputSection">
+                <div class="output-header">
+                    <h2>🎐 20组正面效果图提示词</h2>
+                    <span class="badge" id="countDisplay">0 / 20</span>
+                </div>
+                <div class="prompts-grid" id="promptsList">
+                    <div class="prompt-item" style="background: #f9f3e9; text-align: center; padding: 50px;">
+                        <div class="prompt-number">🎋 点击生成按钮</div>
+                        <div class="prompt-text" style="color: #9e8b72;">将显示20组宋式美学风格节庆美陈装置AI提示词</div>
+                    </div>
+                </div>
+                <div class="footer-note">
+                    ⚡ 每组均为完整描述 · 写实3D效果图 · 真实比例可施工落地 · 正面完全展示
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            const festivalInput = document.getElementById('festival');
+            const venueInput = document.getElementById('venue');
+            const brandInput = document.getElementById('brand');
+            const elementsInput = document.getElementById('elements');
+            const colorSelect = document.getElementById('colorSelect');
+            const generateBtn = document.getElementById('generateBtn');
+            const promptsListDiv = document.getElementById('promptsList');
+            const countDisplay = document.getElementById('countDisplay');
+
+            function setLoading() {
+                promptsListDiv.innerHTML = `<div class="prompt-item" style="background: #f9f3e9; text-align: center; padding: 50px;"><div class="prompt-number">🎋 ⏳</div><div class="prompt-text" style="color: #9e8b72;">正在生成20组宋式美陈提示词，请稍候...</div></div>`;
+                countDisplay.innerText = '0 / 20';
+            }
+
+            function setupCopyButtons() {
+                document.querySelectorAll('.copy-btn').forEach(btn => {
+                    btn.addEventListener('click', function(e) {
+                        const promptText = this.getAttribute('data-prompt');
+                        navigator.clipboard.writeText(promptText).then(() => {
+                            const originalText = this.innerHTML;
+                            this.innerHTML = '✓ 已复制';
+                            this.classList.add('copied');
+                            
+                            setTimeout(() => {
+                                this.innerHTML = originalText;
+                                this.classList.remove('copied');
+                            }, 2000);
+                        }).catch(() => {
+                            alert('复制失败');
+                        });
+                    });
+                });
+            }
+
+            // 生成宋式主题文字
+            function generateThemeText(festival) {
+                const themes = {
+                    '中秋': ['月满西楼 · 桂影清疏', '千里江山 · 共此月明', '玉露金风 · 人间清欢'],
+                    '元宵': ['上元灯影 · 风雅如故', '星桥铁索 · 灯火宋韵', '清辉满城 · 且听风吟'],
+                    '春节': ['岁朝清供 · 春信已至', '新岁惟和 · 雅韵迎春', '风暖繁弦 · 春在宋词'],
+                    '端午': ['端阳清景 · 蒲酒微醺', '碧艾香蒲 · 风雅如初', '江山如画 · 岁岁安康'],
+                    '七夕': ['星河清浅 · 乞巧望月', '银汉无声 · 风雅良夕', '云阶月地 · 共此清秋']
+                };
+                if (themes[festival]) {
+                    return themes[festival][Math.floor(Math.random() * themes[festival].length)];
+                }
+                return '风雅清韵 · 且共从容';
+            }
+
+            function generatePrompts(festival, venue, brand, elements, colors) {
+                const elementList = elements.split(/[·,，\s\n]+/).filter(w => w.trim().length > 0);
+                const mainElement = elementList.length > 0 ? elementList[0] : '月影';
+                const secondaryElements = elementList.slice(1, 3).join('、') || '桂花、山水';
+                
+                const themeText = generateThemeText(festival);
+                
+                const prompts = [];
+                
+                // 背景板结构库 - 宋式风格
+                const structures = [
+                    '主背景板为三层高低错落PVC板，造型取自宋式屏风与{mainElement}轮廓，板面UV打印{colors}渐变与宋画意蕴，主题文字“{themeText}”以浅浮雕字呈现',
+                    '主结构由五块竖长异形板前后叠加构成，造型提取{mainElement}、{secondaryElements}元素，每块板面UV打印宋式山水纹样',
+                    '主背景板设计为展开的宋式手卷造型，画面UV打印{mainElement}与{secondaryElements}意象，左右装饰木色边框',
+                    '采用双层背景板结构，前板镂空{mainElement}轮廓，后板UV打印淡彩{secondaryElements}图案，形成朦胧层次',
+                    '主结构为六边形花窗造型组合，每个窗格内UV打印不同{secondaryElements}墨韵图案，中央圆形留白区域放置主题文字',
+                    '主背景板由四块独立窄长屏风造型板拼接而成，每块屏风UV打印{mainElement}与山水意蕴',
+                    '采用对称留白布局，左右各两块浅色素板，中央突出主题文字，底部点缀{secondaryElements}纹样',
+                    '主结构为三层阶梯式背景板，每层板面UV打印不同明度的{colors}渐变色，顶层以细线刻印主题文字',
+                    '背景板设计为抽象民居屋檐轮廓，屋檐下UV打印{mainElement}与{secondaryElements}淡彩图案',
+                    '主背景板由七个独立方圆板组合，每块板UV打印不同{secondaryElements}宋式纹样，中央主题文字',
+                    '主结构为三块错落山形板，板面UV打印青绿山水意境与{mainElement}，山间点缀{secondaryElements}纹样',
+                    '背景板设计为宋代瓷器轮廓造型，器身UV打印{mainElement}与{secondaryElements}图案',
+                    '采用中心对称布局，左右各两块抽象云纹板，板面UV打印{secondaryElements}淡彩，中央主题文字',
+                    '主结构由四块流线型板组成水纹形态，板面UV打印水纹与{mainElement}',
+                    '背景板设计为圆月造型，月内UV打印{mainElement}与{secondaryElements}宋画意蕴',
+                    '采用三组独立窄板，每组表现一个{secondaryElements}意境，通过留白形成节奏',
+                    '主背景板为抽象书卷造型，卷面UV打印{mainElement}纹样，卷轴位置主题文字',
+                    '采用圆形放射状结构，中心为{mainElement}意象，四周辐射{secondaryElements}小板',
+                    '主结构由七个灯影造型板组成，每块板UV打印不同{secondaryElements}',
+                    '背景板设计为扇形组合，每扇UV打印一个{secondaryElements}墨韵'
+                ];
+
+                // 前景装置库
+                const foregrounds = [
+                    '低位布置{secondaryElements}造型PVC雕塑，高度膝盖位置，散落布置，增强宋式氛围',
+                    '底部散落抽象{secondaryElements}小雕塑，高度30-50cm，色彩与主装置统一',
+                    '前景设置{mainElement}造型小堆头，高度40cm左右，错落摆放于装置前方',
+                    '低位点缀{secondaryElements}元素小雕塑，分散布置，形成节奏感',
+                    '底部放置抽象山石、{secondaryElements}雕塑，高度膝盖以下',
+                    '前景设置三组{secondaryElements}小景，高度30-50cm，与背景板色彩呼应',
+                    '低位散落{mainElement}装饰块，与{secondaryElements}小雕塑结合',
+                    '底部布置小型花枝装置，搭配{secondaryElements}元素',
+                    '前景点缀小型{secondaryElements}装饰，分散布置',
+                    '低位设置{secondaryElements}雕塑组合，高度30-50cm',
+                    '底部散落抽象月影、{secondaryElements}雕塑',
+                    '前景设置{mainElement}造型小景，周围环绕{secondaryElements}',
+                    '低位布置{secondaryElements}造型轻装置',
+                    '底部放置仿真桂花枝、{secondaryElements}雕塑',
+                    '前景点缀{secondaryElements}抽象气球造型',
+                    '低位设置{mainElement}与{secondaryElements}小品',
+                    '底部散落宋式小器物轮廓，搭配{secondaryElements}',
+                    '前景设置清供小景，点缀{secondaryElements}',
+                    '低位布置{secondaryElements}抽象纹样雕塑',
+                    '底部放置竹枝、月影造型，与{secondaryElements}结合'
+                ];
+
+                for (let i = 0; i < 20; i++) {
+                    const structure = structures[i % structures.length]
+                        .replace(/{mainElement}/g, mainElement)
+                        .replace(/{secondaryElements}/g, secondaryElements)
+                        .replace('{colors}', colors)
+                        .replace('{themeText}', themeText);
+                    
+                    const foreground = foregrounds[i % foregrounds.length]
+                        .replace(/{mainElement}/g, mainElement)
+                        .replace(/{secondaryElements}/g, secondaryElements);
+                    
+                    let prompt = `你需要设计的美陈是${venue}的${festival}主题宋式美学风格节庆装置，服务于${brand}，美陈主题文字是“${themeText}”，应用场景是商业空间${festival}节点，核心目标是烘托节日氛围、传递东方雅韵。${structure}，板面UV彩色打印，所有板材画面完整，色彩以${colors}低饱和色调为主，${foreground}，KT板与PVC板材质，整体画面洁净、留白疏朗、层次克制，宋式美学现代演绎，写实3D效果图，真实比例可施工落地，正面完整展示。`;
+                    
+                    prompts.push(prompt);
+                }
+                
+                return prompts;
+            }
+
+            function renderPrompts(prompts) {
+                if (!prompts || prompts.length === 0) {
+                    promptsListDiv.innerHTML = `<div class="prompt-item" style="background: #f9f3e9; text-align: center; padding: 50px;"><div class="prompt-number">🎋 ⚠️</div><div class="prompt-text" style="color: #9e8b72;">生成失败，请重试</div></div>`;
+                    countDisplay.innerText = '0 / 20';
+                    return;
+                }
+
+                let html = '';
+                prompts.forEach((prompt, idx) => {
+                    const escapedPrompt = prompt.replace(/"/g, '&quot;');
+                    html += `
+                        <div class="prompt-item">
+                            <div class="prompt-number">🎋 第 ${idx+1} 组 · 正面完全展示</div>
+                            <div class="prompt-text">${prompt}</div>
+                            <button class="copy-btn" data-prompt="${escapedPrompt}">📋 复制</button>
+                        </div>
+                    `;
+                });
+                
+                promptsListDiv.innerHTML = html;
+                countDisplay.innerText = `${prompts.length} / 20`;
+                setupCopyButtons();
+            }
+
+            function handleGenerate() {
+                const festival = festivalInput.value.trim() || '中秋';
+                const venue = venueInput.value.trim() || '商场中庭';
+                const brand = brandInput.value.trim() || '雅集文化中心';
+                const elements = elementsInput.value.trim() || '月影 · 桂花 · 山水 · 竹 · 屏风 · 瓷器轮廓 · 宋画意蕴';
+                const colors = colorSelect.value;
+                
+                setLoading();
+                
+                setTimeout(() => {
+                    try {
+                        const prompts = generatePrompts(festival, venue, brand, elements, colors);
+                        renderPrompts(prompts);
+                    } catch (e) {
+                        promptsListDiv.innerHTML = `<div class="prompt-item" style="background: #f9f3e9; text-align: center; padding: 50px;"><div class="prompt-number">🎋 ❌</div><div class="prompt-text" style="color: #9e8b72;">生成出错</div></div>`;
+                        countDisplay.innerText = '0 / 20';
+                        console.error(e);
+                    }
+                }, 200);
+            }
+
+            generateBtn.addEventListener('click', handleGenerate);
+            
+            window.addEventListener('load', () => {
+                setTimeout(() => {
+                    handleGenerate();
+                }, 250);
+            });
+        })();
+    </script>
+</body>
+</html>
